@@ -40,18 +40,16 @@
          <!-- START panel-->
          <div data-toggle="play-animation" data-play="fadeIn" data-offset="0" class="panel panel-dark panel-flat">
             <div class="panel-heading text-center">
-               <a href="#">
-                  <img src="../app/img/logo.png" alt="Image" class="block-center img-rounded">
-               </a>
-               <p class="text-center mt-lg">
-                  <strong>SIGN IN TO CONTINUE.</strong>
-               </p>
+               <h2>Smart Inventory</h2>
+                <p class="text-center mt-lg">
+                    <strong>Silahkan Login Untuk Masuk</strong>
+                </p>
             </div>
             <div class="panel-body">
                <form role="form" method="POST" action="{{route('login')}}" class="mb-lg">
                   {{csrf_field()}}
-                  <div class="text-right mb-sm"><a href="{{route('register')}}" class="text-muted">Need to Signup?</a>
-                  </div>
+                  {#<div class="text-right mb-sm"><a href="{{route('register')}}" class="text-muted">Need to Signup?</a>
+                  </div>#}
                   <div class="form-group {{ errors.has('email') ? ' has-error' : '' }} has-feedback">
                      <input id="email" name="email" type="email" placeholder="Enter email" class="form-control" value="{{ old('email') }}">
                      <span class="fa fa-envelope form-control-feedback text-muted"></span>
@@ -76,7 +74,7 @@
                            <input type="checkbox" name="remember" value="{{old('remember')}}" {{ old('remember') ? 'checked' : '' }}>
                            <span class="fa fa-check"></span>Remember Me</label>
                      </div>
-                     <div class="pull-right"><a href="#" class="text-muted">Forgot your password?</a>
+                     <div class="pull-right"><a href="{{ route('password.request') }}" class="text-muted">Lupa Password?</a>
                      </div>
                   </div>
                   <button type="submit" class="btn btn-block btn-primary">Login</button>

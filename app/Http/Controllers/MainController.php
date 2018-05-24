@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class MainController extends Controller
 {
@@ -19,6 +20,9 @@ class MainController extends Controller
      */
     public function index()
     {
+        $role = Auth::guard()->user()->roles;
+        $permissions = json_decode($role[0]->permissions);
+        session(['permissions' => $permissions]);
         $pembelian_stat = DB::table("transaksis as t")
             ->select(DB::raw("count(t.id_transaksi) as num, date_format(t.created_at, '%m') as month"))
             ->where("t.type", "=", "0")
