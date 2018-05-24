@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use FontLib\Table\Table;
 use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -56,6 +58,8 @@ class UserController extends Controller
         $user->created_at = date('Y-m-d h:i:s');
         $user->updated_at = date('Y-m-d h:i:s');
         $save = $user->save();
+
+        $user->roles()->attach($request->input('role'));
 
         return redirect('/user')->with('success', 'Data user berhasil disimpan');
     }
@@ -122,6 +126,10 @@ class UserController extends Controller
         $user->alamat = $request->input('alamat');
         $user->no_telepon = $request->input('no_telepon');
         $update = $user->save();
+
+        DB::table('role_users')
+            ->where('user_id', $id)
+            ->update(['role_id'=>$request->input('role')]);
 
         return redirect('/user')->with('success', 'Data user berhasil diperbaharui');
     }

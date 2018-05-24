@@ -25,6 +25,7 @@
                         <a href="/user/create" class="mb-sm btn btn-info"><span class="fa fa-plus-square"></span> Tambah User</a>
                      </div>
                      <div class="panel-body">
+                         {{ auth_user().id }}
                         <table id="datatable1" class="table table-striped table-hover table-responsive">
                            <thead>
                               <tr>
@@ -38,21 +39,28 @@
                            </thead>
                            <tbody>
                               {%for user in users%}
-                              <tr class="gradeA">
-                                 <td>{{user.name}}</td>
-                                 <td>{{user.email}}</td>
-                                 <td>{{user.alamat}}</td>
-                                 <td>{{user.no_telepon}}</td>
-                                 <td>Role</td>
-                                 <td>
-                                    <a class="mb-sm btn btn-green btn-xs pull-left" href="user/{{ user.id }}/edit">Edit</a>
-                                    <!--  <a class="mb-sm btn btn-danger btn-xs" href="#">Delete</a>  -->
-                                    <form method="POST" action="{{ url('user') }}/{{ user.id }}">
-                                        <input type="hidden" name="_METHOD" value="DELETE"> &nbsp;
-                                        <button class="mb-sm btn btn-danger btn-xs" href="#">Delete</button>
-                                    </form>
-                                 </td>
-                              </tr>
+                                  {% if auth_user().id != 1 %}
+                                      {% if user.roles[0].id == 1 %}
+                                         {% set role = 'Admin' %}
+                                      {% else %}
+                                         {% set role = 'Pegawai' %}
+                                      {% endif %}
+                                      <tr class="gradeA">
+                                         <td>{{user.name}}</td>
+                                         <td>{{user.email}}</td>
+                                         <td>{{user.alamat}}</td>
+                                         <td>{{user.no_telepon}}</td>
+                                         <td>{{role}}</td>
+                                         <td>
+                                            <a class="mb-sm btn btn-green btn-xs pull-left" href="user/{{ user.id }}/edit">Edit</a>
+                                            <!--  <a class="mb-sm btn btn-danger btn-xs" href="#">Delete</a>  -->
+                                            <form method="POST" action="{{ url('user') }}/{{ user.id }}">
+                                                <input type="hidden" name="_METHOD" value="DELETE"> &nbsp;
+                                                <button class="mb-sm btn btn-danger btn-xs" href="#">Delete</button>
+                                            </form>
+                                         </td>
+                                      </tr>
+                                  {% endif %}
                               {%endfor%}
                            </tbody>
                         </table>

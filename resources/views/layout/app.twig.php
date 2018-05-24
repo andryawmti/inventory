@@ -52,7 +52,6 @@
    </style>
 
 </head>
-
 <body>
    <!-- START Main wrapper-->
    <div class="wrapper">
@@ -61,16 +60,16 @@
          <!-- START navbar header-->
          <div class="navbar-header">
             <a href="dashboard.v1.html" class="navbar-brand">
-               <div class="brand-logo">
-                  <img src="{{ asset('app/img/logo.png') }}" alt="App Logo" class="img-responsive">
-                  <!-- <h4>Inventory System</h4> -->
+               <div style="text-align:left; padding: 10px; color: #FFFFFF;" class="brand-logo">
+                  {#<img src="{{ asset('app/img/logo.png') }}" alt="App Logo" class="img-responsive">#}
+                   <h3 style="margin: 0px; padding: 0px; display: inline-block;">Smart Inventory</h3>
                </div>
                <div class="brand-logo-collapsed">
-                  <img src="{{ asset('app/img/logo-single.png') }}" alt="App Logo" class="img-responsive">
+                  <img src="{{ asset('app/img/logo-single.png') }}" alt="App Logo" title="Smart Inventory" class="img-responsive">
                </div>
             </a>
          </div>
-         <!-- END navbar header-->
+          <!-- END navbar header-->
          <!-- START Nav wrapper-->
          <div class="nav-wrapper">
             <!-- START Left navbar-->
@@ -153,11 +152,11 @@
                </div>
             </div>
             <!-- END user info-->
+            {% set permissions = session('permissions') %}
             <ul class="nav">
                <!-- START Menu-->
                <li class="nav-heading">Main navigation</li>
                <li>
-
                     <a href="/" title="Dashboard" data-toggle="" class="no-submenu">
                         <em class="fa fa-dot-circle-o"></em>
                         <span class="item-text">Dashboard</span>
@@ -170,53 +169,70 @@
                     </a>
                     <!--  START Submenu item  -->
                     <ul class="nav collapse">
+                        {% if permissions.data_produk %}
                         <li>
                             <a href="/produk" title="Produk" data-toggle="" class="no-submenu">
                                 <span class="item-text">Produk</span>
                             </a>
                         </li>
+                        {% endif %}
+                        {% if permissions.data_satuan %}
                         <li>
                             <a href="/satuan" title="Satuan" data-toggle="" class="no-submenu">
                                 <span class="item-text">Satuan</span>
                             </a>
                         </li>
+                        {% endif %}
+                        {% if permissions.data_distributor %}
                         <li>
                             <a href="/distributor" title="Distributor" data-toggle="" class="no-submenu">
                                 <span class="item-text">Distributor</span>
                             </a>
                         </li>
+                        {% endif %}
+                        {% if permissions.data_pelanggan %}
                         <li>
                             <a href="/pelanggan" title="Pelanggan" data-toggle="" class="no-submenu">
                                 <span class="item-text">Pelanggan</span>
                             </a>
                         </li>
+                        {% endif %}
                     </ul>
                     <!--  END Submenu item  -->
                </li>
+               {% if permissions.data_pembelian %}
                <li>
                   <a href="/pembelian" title="Pembelian" data-toggle="" class="no-submenu">
                      <em class="fa fa-list-alt"></em>
                      <span class="item-text">Pembelian</span>
                   </a>
                </li>
+               {% endif %}
+               {% if permissions.data_penjualan %}
                <li>
                   <a href="/penjualan" title="Penjualan" data-toggle="" class="no-submenu">
                      <em class="fa fa-area-chart"></em>
                      <span class="item-text">Penjualan</span>
                   </a>
                </li>
+               {% endif %}
+               {% if permissions.data_user %}
                <li>
                   <a href="/user" title="DataUser" data-toggle="" class="no-submenu">
                      <em class="fa fa-user"></em>
                      <span class="item-text">Data User</span>
                   </a>
                </li>
+               {% endif %}
+               {% if permissions.auto_purchase %}
                <li>
                   <a href="{{route('auto.purchase')}}" title="Jadwal Pembelian" data-toggle="" class="no-submenu">
                      <em class="fa fa-calendar"></em>
                      <span class="item-text">Auto Purchase</span>
                   </a>
                </li>
+               {% endif %}
+               {% if permissions.laporan %}
                <li>
                     <a href="#" title="Laporan" data-toggle="collapse-next" class="has-submenu">
                         <em class="fa fa-print"></em>
@@ -239,18 +255,23 @@
                     </ul>
                     <!--  END Submenu item  -->
                </li>
+               {% endif %}
+               {% if permissions.pengaturan_eqo %}
                <li>
                   <a href="/eqo" title="Pengaturan EQO" data-toggle="" class="no-submenu">
                      <em class="fa fa-balance-scale"></em>
                      <span class="item-text">Pengaturan EQO</span>
                   </a>
                </li>
+               {% endif %}
+               {% if permissions.pengaturan %}
                <li>
                   <a href="{{route('pengaturan')}}" title="Pengaturan Sistem" data-toggle="" class="no-submenu">
                      <em class="fa fa-cogs"></em>
                      <span class="item-text">Pengaturan Sistem</span>
                   </a>
                </li>
+               {% endif %}
             </ul>
          </nav>
          <!-- END Sidebar (left)-->

@@ -75,6 +75,19 @@
                                     <div class="col-sm-2">&nbsp;</div>
                                 </div>
                             </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="col-sm-1">&nbsp;</div>
+                                    <label class="col-sm-2 control-label">Role</label>
+                                    <div class="col-sm-6">
+                                        <select name="role" id="role" class="form-control">
+                                            <option value="1">Admin</option>
+                                            <option value="2">Pegawai</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">&nbsp;</div>
+                                </div>
+                            </fieldset>
                            {{ csrf_field() }}
                         </div> <!--end of panel body-->
                         <div class="panel-footer text-center">
