@@ -6,9 +6,6 @@
 <!--[if !IE]><!-->
 <html lang="en" class="no-ie">
 <!--<![endif]-->
-
-
-<!-- Mirrored from themicon.co/theme/beadmin/v1.1/pages/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 17 Dec 2017 07:50:23 GMT -->
 <head>
    <!-- Meta-->
    <meta charset="utf-8">
@@ -18,7 +15,10 @@
    <meta name="author" content="">
    <title>Login-{{config('app.name')}}</title>
    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries-->
-   <!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script><![endif]-->
+   <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+   <![endif]-->
    <!-- Bootstrap CSS-->
    <link rel="stylesheet" href="{{asset('app/css/bootstrap.css')}}">
    <!-- Vendor CSS-->
@@ -95,7 +95,4 @@
    <script src="{{asset('app/js/pages.js')}}"></script>
    <!-- END Scripts-->
 </body>
-
-
-<!-- Mirrored from themicon.co/theme/beadmin/v1.1/pages/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 17 Dec 2017 07:50:24 GMT -->
 </html>
