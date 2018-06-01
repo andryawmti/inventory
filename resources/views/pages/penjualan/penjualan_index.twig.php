@@ -76,8 +76,8 @@
                                  <td>{{ penjualan.grand_total | number_format(2, ',', '.') }}</td>
                                  <td>
                                     <a class="mb-sm btn btn-info btn-xs" href="#" id="{{penjualan.id_transaksi}}" onclick="viewDetail(this.id);">Lihat Detail</a>
-                                    <a class="mb-sm btn btn-info btn-xs" href="{{url('penjualan')}}/{{penjualan.id_transaksi}}/edit" id="edit_{{penjualan.id_transaksi}}">Edit</a> &nbsp;
-                                    <!-- <a class="mb-sm btn btn-danger btn-xs" href="#">Delete</a> -->
+                                    {#<a class="mb-sm btn btn-info btn-xs" href="{{url('penjualan')}}/{{penjualan.id_transaksi}}/edit" id="edit_{{penjualan.id_transaksi}}">Edit</a>#} &nbsp;
+                                    {#<a class="mb-sm btn btn-danger btn-xs" href="#">Delete</a>#}
                                  </td>
                               </tr>
                               {% endfor %}
@@ -150,9 +150,9 @@
                 $('#cetak_detail').attr("href","{{url('report/detail-penjualan')}}/"+id);
                 $('#barang_dikirim').attr("href","{{url('/barang-dikirim')}}/"+id);
                 if (penjualan.is_delivered) {
-                    $('#barang_dikirim').css('display', 'none');
+                    //$('#barang_dikirim').css('display', 'none');
                 } else {
-                    $('#barang_dikirim').css('display', 'inline');
+                    //$('#barang_dikirim').css('display', 'inline');
                 }
                 $('#view_modal').modal('show');
             },
@@ -240,7 +240,7 @@
             </table>
           </div>
           <div class="modal-footer">
-              <a href="" id="barang_dikirim" class="btn btn-success btn-sm"><span class="fa fa-print"></span>&nbsp;Konfirmasi Barang Dikirim</a>
+              <a href="" id="barang_dikirim" style="display: none;" class="btn btn-success btn-sm"><span class="fa fa-print"></span>&nbsp;Konfirmasi Barang Dikirim</a>
               <a href="" id="cetak_detail" class="btn btn-info btn-sm"><span class="fa fa-print"></span>&nbsp;Cetak</a>
           </div>
        </div>

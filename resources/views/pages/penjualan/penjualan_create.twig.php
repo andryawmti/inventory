@@ -327,7 +327,15 @@
 
        function tambahBarang(){
            let id = $('#id_produk').val();
-           let qty = parseInt($('#qty').val());
+           let qty = $('#qty').val();
+           if (id == '') {
+               alert('Maaf anda belum memilih produk!');
+               return false;
+           } else if (qty == '') {
+               alert('Maaf anda belum memasukan jumlah quantitas!')
+               return false;
+           }
+           qty = parseInt($('#qty').val())
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

@@ -7,18 +7,18 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ResetPassword extends Mailable
+class TransaksiPembelian extends Mailable
 {
     use Queueable, SerializesModels;
-
+    protected $transaksi;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(array $transaksi)
     {
-        //
+        $this->transaksi = $transaksi;
     }
 
     /**
@@ -28,6 +28,9 @@ class ResetPassword extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.reset_password');
+        return $this->view('emails.transaksi_pembelian')
+                    ->subject('[Notice]Transaksi Pembelian By EQO')
+                    ->from('inventory@strike-noir.com')
+                    ->with($this->transaksi);
     }
 }
