@@ -14,6 +14,7 @@
    <meta name="keywords" content="">
    <meta name="author" content="">
    <title>Login-{{config('app.name')}}</title>
+   <link rel="shortcut icon" type="image/png" href="{{asset('app/img/logo-single.png')}}"/>
    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries-->
    <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
