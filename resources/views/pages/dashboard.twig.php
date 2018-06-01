@@ -199,8 +199,8 @@
 {% endblock %}
 
 {% block page_script %}
-<script src="http://www.chartjs.org/dist/2.7.2/Chart.bundle.js"></script>
-<script src="http://www.chartjs.org/samples/latest/utils.js"></script>
+<script src="https://www.chartjs.org/dist/2.7.2/Chart.bundle.js"></script>
+<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
 
 <script>
     let pembelian = {{pembelian|json_encode|raw}};
