@@ -60,7 +60,7 @@
       <nav role="navigation" class="navbar navbar-default navbar-top navbar-fixed-top">
          <!-- START navbar header-->
          <div class="navbar-header">
-            <a href="dashboard.v1.html" class="navbar-brand">
+            <a href="/" class="navbar-brand">
                <div style="text-align:left; padding: 10px; color: #FFFFFF;" class="brand-logo">
                   {#<img src="{{ asset('app/img/logo.png') }}" alt="App Logo" class="img-responsive">#}
                    <h3 style="margin: 0px; padding: 0px; display: inline-block;">Smart Inventory</h3>
