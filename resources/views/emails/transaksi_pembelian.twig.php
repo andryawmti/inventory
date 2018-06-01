@@ -62,9 +62,16 @@
             </tr>
             </thead>
             <tbody id="detail_pembelian">
-            <tr style="text-align: center;">
-                <td colspan="6">No data found</td>
-            </tr>
+            {% for dt in detail_transaksi %}
+                <tr>
+                    <td>{{ dt.id_produk }}</td>
+                    <td>{{ dt.nama_produk }}</td>
+                    <td>{{ dt.id_satuan }}</td>
+                    <td>{{ dt.qty }}</td>
+                    <td>{{ dt.harga_jual }}</td>
+                    <td>{{ dt.harga_jual * dt.qty }}</td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>

@@ -69,8 +69,8 @@
                                  <td>{{ pembelian.total_harga | number_format(2, ',', '.') }}</td>
                                  <td>
                                     <a class="mb-sm btn btn-info btn-xs" id="{{pembelian.id_transaksi}}" href="#" onclick="viewDetail(this.id)">Lihat Detail</a>
-                                    <a class="mb-sm btn btn-info btn-xs" id="edit_{{pembelian.id_transaksi}}" href="{{url('/pembelian/')}}/{{pembelian.id_transaksi}}/edit">Edit</a>&nbsp;
-                                    <!-- <a class="mb-sm btn btn-danger btn-xs" href="#">Delete</a> -->
+                                    {#<a class="mb-sm btn btn-info btn-xs" id="edit_{{pembelian.id_transaksi}}" href="{{url('/pembelian/')}}/{{pembelian.id_transaksi}}/edit">Edit</a>#}&nbsp;
+                                    {#a class="mb-sm btn btn-danger btn-xs" href="#">Delete</a>#}
                                  </td>
                               </tr>
                               {% endfor %}
@@ -220,7 +220,7 @@
                   </table>
                 </div>
                 <div class="modal-footer">
-                    <a href="" id="barang_diterima" class="btn btn-success btn-sm"><span class="fa fa-print"></span>&nbsp;Konfirmasi Barang Diterima</a>
+                    <a href="" id="barang_diterima" class="btn btn-success btn-sm"><span class="fa fa-archive"></span>&nbsp;Konfirmasi Barang Diterima</a>
                     <a href="" id="cetak_detail" class="btn btn-info btn-sm"><span class="fa fa-print"></span>&nbsp;Cetak</a>
                 </div>
              </div>

@@ -3,17 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\DetailTransaksi;
+use App\Mail\TransaksiPembelian;
 use App\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Transaksi;
 use App\PengaturanEqo;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 
 class PembelianController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('makePurchase');
     }
 
     /**
@@ -262,57 +265,108 @@ class PembelianController extends Controller
             $eqo_result[] = $e;
 
         }
-//        return json_encode($eqo_result);
         return view('pages.pembelian.pembelian_jadwal')->with('eqo_result', $eqo_result);
     }
 
     public function makePurchase()
     {
+        $result = array(
+            "total_success" => 0,
+            "total_error" => 0,
+            "total_transaction" => 0,
+            "email_sent" => false,
+        );
         $produks = $this->getOutOfStockProduk();
         if (count($produks) > 0) {
-            $transaksi = new Transaksi;
-            $transaksi->id_distributor = '11';
-            $transaksi->tgl_transaksi = date('Y-m-d h:i:s');
-            $transaksi->total_harga = $this->getTotalHarga($produks);
-            $transaksi->type = '0';
-            $transaksi->mode = '1';
-            if($transaksi->save()){
-                $my_produks = array();
-                $id_transaksi = $transaksi->id_transaksi;
-                foreach ($produks as $produk) {
-                    $my_produks[] = array(
-                        'id_transaksi' => $id_transaksi,
-                        'id_produk' => $produk->id_produk,
-                        'qty' => $produk->quantity_per_order,
-                        'harga' => $produk->harga_beli,
-                        'created_at'=> date("Y-m-d h:i:s"),
-                        'updated_at'=> date("Y-m-d h:i:s")
-                    );
-                }
-                $isProduksInserted = DB::table('detail_transaksi')->insert($my_produks);
-                if($isProduksInserted){
-                    foreach ($my_produks as $p) {
-//                        $this->updateStok(array('id'=>$p['id_produk'],'new_stok'=>$p['qty']));
-                        $eqo_rule = PengaturanEqo::where('produk_id','=',$p['id_produk'])->get()[0];
-                        $eqo_rule->current_number_of_order = $eqo_rule->current_number_of_order + 1;
-                        $eqo_rule->save();
+            /**we will separate each produk transaction based on distributor id, so it is just like segmenting produk by distributor id
+            first, get distributor list from list of produks*/
+            $distirbutor_list = $this->getIdDistributorFromProduks($produks); //it is contain list of id distributor
+            /**Then we will create Transaction List based on list of distributor*/
+            $transaction_list = array();
+            foreach ($distirbutor_list as $x => $dl) {
+                $transaction_list[$x]['id_distributor'] = $dl;
+                foreach ($produks as $p) {
+                    if ($dl == $p->id_distributor) {
+                        $transaction_list[$x]['produk_list'][] = $p;
                     }
-                    $result = array(
-                        'error' => 0,
-                        'message' => 'Berhasil menyimpan transaksi pembelian'
-                    );
+                }
+            }
+            /**Now Lets iterate through transaction_list to create a transaction*/
+            foreach ($transaction_list as $tl) {
+                $transaksi = new Transaksi;
+                $transaksi->id_distributor = $tl['id_distributor'];
+                $transaksi->tgl_transaksi = date('Y-m-d h:i:s');
+                $transaksi->total_harga = $this->getTotalHarga($tl['produk_list']);
+                $transaksi->type = '0';
+                $transaksi->mode = '1';
+                if($transaksi->save()){
+                    $my_produks = array();
+                    $id_transaksi = $transaksi->id_transaksi;
+                    foreach ($tl['produk_list'] as $produk) {
+                        $qty = $produk->quantity_per_order;
+                        if (($produk->number_of_order - $produk->current_number_of_order) < 1) {
+                            $qty = $produk->annual_purchase - ($produk->quantity_per_order * $produk->current_number_of_order);
+                        }
+                        $my_produks[] = array(
+                            'id_transaksi' => $id_transaksi,
+                            'id_produk' => $produk->id_produk,
+                            'qty' => $qty,
+                            'harga' => $produk->harga_beli,
+                            'created_at'=> date("Y-m-d h:i:s"),
+                            'updated_at'=> date("Y-m-d h:i:s")
+                        );
+                    }
+                    $isProduksInserted = DB::table('detail_transaksi')->insert($my_produks);
+                    if($isProduksInserted){
+                        foreach ($tl['produk_list'] as $p) {
+                            /**we disable this, because we will update the stock when the iten is received
+                            $this->updateStok(array('id'=>$p['id_produk'],'new_stok'=>$p['qty']));*/
+                            $eqo_rule = PengaturanEqo::where('produk_id','=',$p->id_produk)->first();
+                            $num_of_order = $p->number_of_order;
+                            $c_num_of_order = $eqo_rule->current_number_of_order;
+                            if ( ($num_of_order - $c_num_of_order) < 1) {
+                                $eqo_rule->current_number_of_order += $num_of_order - $c_num_of_order;
+                            } else {
+                                $eqo_rule->current_number_of_order += 1;
+                            }
+                            $eqo_rule->save();
+                        }
+                        /*$result = array(
+                            'error' => 0,
+                            'message' => 'Berhasil menyimpan transaksi pembelian'
+                        );*/
+                        $result['total_success'] += 1;
+                        $detail_transaksi = DB::table('detail_transaksi as dt')
+                            ->leftJoin('produks as p', 'p.id_produk', '=', 'dt.id_produk')
+                            ->leftJoin('satuans as s', 's.id_satuan', '=', 'p.id_satuan')
+                            ->selectRaw('dt.* , p.nama_produk, s.nama_satuan')
+                            ->where('id_transaksi','=',$transaksi->id_transaksi)
+                            ->get();
+                        $mailParams = array(
+                            'transaksi' => $transaksi,
+                            'detail_transaksi' => $detail_transaksi,
+                        );
+                        Mail::to('andryavera@gmail.com')->send(new TransaksiPembelian($mailParams));
+                        if (!Mail::failures()) {
+                            $result['email_sent'] = true;
+                        }
+                    }else{
+                        /*$result = array(
+                            'error' => 1,
+                            'message' => 'Terjadi kesalahan, gagal menyimpan'
+                        );*/
+                        $result['total_error'] += 1;
+                    }
                 }else{
-                    $result = array(
+                    /*$result = array(
                         'error' => 1,
                         'message' => 'Terjadi kesalahan, gagal menyimpan'
-                    );
+                    );*/
+                    $result['total_error'] += 1;
                 }
-            }else{
-                $result = array(
-                    'error' => 1,
-                    'message' => 'Terjadi kesalahan, gagal menyimpan'
-                );
+                $result['total_transaction'] += 1;
             }
+
 
             return json_encode($result);
         }
@@ -394,6 +448,17 @@ class PembelianController extends Controller
         $transaksi->is_delivered = '1';
         $transaksi->save();
         return redirect(url('pembelian'))->with('success', 'Stok produk berhasil diperbaharui');
+    }
+
+    public function getIdDistributorFromProduks($produks)
+    {
+        $distibutor_list = array();
+        foreach ($produks as $p) {
+            if (!in_array($p->id_distributor,$distibutor_list)) {
+                $distibutor_list[] = $p->id_distributor;
+            }
+        }
+        return $distibutor_list;
     }
 
 }

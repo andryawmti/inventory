@@ -2,7 +2,7 @@
 
 Route::get('/', 'MainController@index');
 
-Route::resource('produk', 'ProduksController')->middleware('can:data-produk');
+Route::resource('produk', 'ProduksController')->middleware('can:data_produk');
 Route::post('/produk-import', 'ProduksController@produkImport')
     ->name('produk.import')
     ->middleware('can:data_produk');
@@ -63,7 +63,7 @@ Route::prefix('/report')->group(function(){
 
 Auth::routes();
 
-//Route::get('home', 'HomeController@index')->name('home');
+Route::get('home', 'HomeController@index')->name('home');
 Route::prefix('/pengaturan')->group(function(){
     Route::get('/', 'PengaturanController@index')->name('pengaturan')
         ->middleware('can:pengaturan');
