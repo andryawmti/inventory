@@ -245,7 +245,7 @@ class PembelianController extends Controller
     public function autoPurchase()
     {
         $list_eqo = DB::table('pengaturan_eqos as e')
-            ->leftJoin('produks as p','e.produk_id','=','p.id_produk')
+            ->leftJoin('produks as p','e.id_produk','=','p.id_produk')
             ->select('e.*','p.*')
             ->orderBy('e.created_at','desc')
             ->get();
@@ -321,7 +321,7 @@ class PembelianController extends Controller
                         foreach ($tl['produk_list'] as $p) {
                             /**we disable this, because we will update the stock when the iten is received
                             $this->updateStok(array('id'=>$p['id_produk'],'new_stok'=>$p['qty']));*/
-                            $eqo_rule = PengaturanEqo::where('produk_id','=',$p->id_produk)->first();
+                            $eqo_rule = PengaturanEqo::where('id_produk','=',$p->id_produk)->first();
                             $num_of_order = $p->number_of_order;
                             $c_num_of_order = $eqo_rule->current_number_of_order;
                             if ( ($num_of_order - $c_num_of_order) < 1) {
@@ -379,7 +379,7 @@ class PembelianController extends Controller
     public function getOutOfStockProduk()
     {
         $produks = DB::table('pengaturan_eqos as e')
-            ->leftJoin('produks as p','p.id_produk','=','e.produk_id')
+            ->leftJoin('produks as p','p.id_produk','=','e.id_produk')
             ->select('e.*','p.*')
             ->where('p.stok','<=','5')
             ->get();

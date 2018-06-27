@@ -15,7 +15,7 @@ class CreatePengaturanEqosTable extends Migration
     {
         Schema::create('pengaturan_eqos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('produk_id');
+            $table->integer('id_produk');
             $table->string('annual_purchase');
             $table->string('holding_cost');
             $table->string('fixed_cost');

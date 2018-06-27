@@ -29,7 +29,7 @@
                                  <div class="col-sm-1">&nbsp;</div>
                                  <label class="col-sm-2 control-label">Produk</label>
                                  <div class="col-sm-6">
-                                    <select name="produk_id" required="required" class="form-control">
+                                    <select name="id_produk" required="required" class="form-control">
                                         <option value="0">--Pilih--</option>
                                         {% if produks | length > 0 %}
                                         {% for produk in produks %}
@@ -43,6 +43,25 @@
                                  </div>
                               </div>
                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="col-sm-1">&nbsp;</div>
+                                    <label class="col-sm-2 control-label">Distributor</label>
+                                    <div class="col-sm-6">
+                                        <select name="id_distributor" required="required" class="form-control">
+                                            <option value="0">--Pilih--</option>
+                                            {% if distributors | length > 0 %}
+                                            {% for d in distributors %}
+                                            <option value="{{d.id_distributor}}">{{d.nama_distributor}}</option>
+                                            {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                            </fieldset>
                            <fieldset>
                               <div class="form-group">
                                  <div class="col-sm-1">&nbsp;</div>

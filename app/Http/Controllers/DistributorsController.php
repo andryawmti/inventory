@@ -104,8 +104,8 @@ class DistributorsController extends Controller
      */
     public function destroy($id)
     {
-        $distributor = Distributor::find($id);
-        $distributor->delete();
+        /*$distributor = Distributor::find($id);
+        $distributor->delete();*/
         return redirect('/distributor')->with('success', 'Data distributor berhasil dihapus');
     }
 

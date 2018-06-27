@@ -81,7 +81,9 @@
                                     <label class="col-sm-2 control-label">Role</label>
                                     <div class="col-sm-6">
                                         <select name="role" id="role" class="form-control">
+                                            {% if auth_user().id == 1 %}
                                             <option value="1">Admin</option>
+                                            {% endif %}
                                             <option value="2">Pegawai</option>
                                         </select>
                                     </div>

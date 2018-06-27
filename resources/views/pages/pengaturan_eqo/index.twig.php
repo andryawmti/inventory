@@ -48,10 +48,10 @@
                                  <td>
                                     <a class="mb-sm btn btn-green btn-xs pull-left" href="eqo/{{ aturan.id }}/edit">Edit</a>
                                     <!--  <a class="mb-sm btn btn-danger btn-xs" href="#">Delete</a>  -->
-                                    <form action="{{ url('eqo') }}/{{ aturan.id }}" method="POST" class="pull-left">
+                                    <form id="delete_{{aturan.id}}" action="{{ url('eqo') }}/{{ aturan.id }}" method="POST" class="pull-left">
                                         <input type="hidden" name="_method" value="DELETE">&nbsp;
                                         {{csrf_field()}}
-                                        <button class="mb-sm btn btn-danger btn-xs" href="#">Delete</button>
+                                        <button type="button" id="{{aturan.id}}" onclick="deleteUser(this.id)" class="mb-sm btn btn-danger btn-xs">Delete</button>
                                     </form>
                                  </td>
                               </tr>
@@ -74,4 +74,21 @@
     <script src="{{ asset('vendor/datatables/media/js/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-colvis/js/dataTables.colVis.js') }}"></script>
     <!-- END Page Custom Script-->
+    <!-- SWEET ALERT-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        function deleteUser(id) {
+            swal({
+                title: "Are you sure?",
+                text: "You will delete this user permanently!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    document.getElementById('delete_'+id).submit();
+                }
+            });
+        }
+    </script>
 {% endblock %}

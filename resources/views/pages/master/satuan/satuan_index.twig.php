@@ -42,9 +42,10 @@
                                  <td>
                                     <a class="mb-sm btn btn-green btn-xs pull-left" href="satuan/{{ satuan.id_satuan }}/edit">Edit</a>
                                     <!--  <a class="mb-sm btn btn-danger btn-xs" href="#">Delete</a>  -->
-                                    <form action="{{ url('satuan') }}/{{ stuan.id_satuan }}" method="POST">
-                                        <input type="hidden" name="_METHOD" value="DELETE">
-                                        <button class="mb-sm btn btn-danger btn-xs" href="#">Delete</button>
+                                    <form id="delete_{{satuan.id_satuan}}" action="{{ url('satuan') }}/{{ satuan.id_satuan }}" method="POST">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        {{csrf_field()}}
+                                        <button type="button" id="{{satuan.id_satuan}}" onclick="deleteUser(this.id)" class="mb-sm btn btn-danger btn-xs">Delete</button>
                                     </form>
                                  </td>
                               </tr>
@@ -66,4 +67,21 @@
     <script src="{{ asset('vendor/datatables/media/js/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-colvis/js/dataTables.colVis.js') }}"></script>
     <!-- END Page Custom Script-->
+    <!-- SWEET ALERT-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        function deleteUser(id) {
+            swal({
+                title: "Are you sure?",
+                text: "You will delete this user permanently!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    document.getElementById('delete_'+id).submit();
+                }
+            });
+        }
+    </script>
 {% endblock %}
