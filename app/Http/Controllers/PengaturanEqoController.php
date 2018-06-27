@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Distributor;
 use Illuminate\Http\Request;
 use App\PengaturanEqo;
 Use App\Produk;
@@ -34,7 +35,8 @@ class PengaturanEqoController extends Controller
     public function create()
     {
         $produks = $this->getProduks();
-        return view('pages.pengaturan_eqo.create', compact('produks', $produks));
+        $distributors = Distributor::all();
+        return view('pages.pengaturan_eqo.create')->with(['produks'=>$produks, 'distributors'=>$distributors]);
     }
 
     /**
@@ -46,7 +48,8 @@ class PengaturanEqoController extends Controller
     public function store(Request $request)
     {
         $eqo = new PengaturanEqo;
-        $eqo->produk_id = $request->input('produk_id');
+        $eqo->id_produk = $request->input('id_produk');
+        $eqo->id_distributor = $request->input('id_distributor');
         $eqo->annual_purchase =  $request->input('unit_per_year');
         $eqo->holding_cost = $request->input('holding_cost');
         $eqo->fixed_cost = $request->input('fixed_cost');
@@ -80,8 +83,9 @@ class PengaturanEqoController extends Controller
     {
         $aturan = PengaturanEqo::find($id);
         $produks = Produk::all();
-        $produk = Produk::find($aturan->produk_id);
-        return view('pages.pengaturan_eqo.edit')->with(['aturan' => $aturan, 'produk' => $produk, 'produks' => $produks]);
+        $produk = Produk::find($aturan->id_produk);
+        $distributors = Distributor::all();
+        return view('pages.pengaturan_eqo.edit')->with(['aturan' => $aturan, 'produk' => $produk, 'produks' => $produks,'distributors'=>$distributors]);
     }
 
     /**
@@ -94,7 +98,8 @@ class PengaturanEqoController extends Controller
     public function update(Request $request, $id)
     {
         $aturan = PengaturanEqo::find($id);
-        $aturan->produk_id = $request->input('produk_id');
+        $aturan->id_produk = $request->input('id_produk');
+        $aturan->id_distributor = $request->input('id_distributor');
         $aturan->annual_purchase = $request->input('unit_per_year');
         $aturan->holding_cost = $request->input('holding_cost');
         $aturan->fixed_cost = $request->input('fixed_cost');
@@ -110,15 +115,15 @@ class PengaturanEqoController extends Controller
      */
     public function destroy($id)
     {
-        $aturan = PengaturanEqo::find($id);
-        $delete = $aturan->delete();
+        /*$aturan = PengaturanEqo::find($id);
+        $delete = $aturan->delete();*/
         return redirect('/eqo')->with('success', 'Data Aturan EQO berhasil diperbaharui');
     }
 
     private function getAllAturan()
     {
         $aturans = DB::table('pengaturan_eqos')
-        ->join('produks', 'produks.id_produk', '=', 'pengaturan_eqos.produk_id')
+        ->join('produks', 'produks.id_produk', '=', 'pengaturan_eqos.id_produk')
         ->select('pengaturan_eqos.*', 'produks.*')
         ->get();
 
@@ -128,9 +133,9 @@ class PengaturanEqoController extends Controller
     private function getProduks()
     {
         $produks = DB::table('produks')
-                ->leftJoin('pengaturan_eqos', 'produks.id_produk', '=', 'pengaturan_eqos.produk_id')
+                ->leftJoin('pengaturan_eqos', 'produks.id_produk', '=', 'pengaturan_eqos.id_produk')
                 ->select('produks.*')
-                ->where('pengaturan_eqos.produk_id', '=', null)
+                ->where('pengaturan_eqos.id_produk', '=', null)
                 ->get();
         return $produks;
     }

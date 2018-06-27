@@ -89,7 +89,9 @@
                                     <div class="col-sm-6">
                                         {% set role = user.roles[0].id %}
                                         <select name="role" id="role" class="form-control">
+                                            {% if auth_user().id == 1 %}
                                             <option {% if role == 1 %} selected="1" {% endif %} value="1">Admin</option>
+                                            {% endif %}
                                             <option {% if role == 2 %} selected="1" {% endif %} value="2">Pegawai</option>
                                         </select>
                                     </div>

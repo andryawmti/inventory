@@ -25,7 +25,6 @@
                         <a href="/user/create" class="mb-sm btn btn-info"><span class="fa fa-plus-square"></span> Tambah User</a>
                      </div>
                      <div class="panel-body">
-                         {{ auth_user().id }}
                         <table id="datatable1" class="table table-striped table-hover table-responsive">
                            <thead>
                               <tr>
@@ -39,12 +38,12 @@
                            </thead>
                            <tbody>
                               {%for user in users%}
-                                  {% if auth_user().id != 1 %}
-                                      {% if user.roles[0].id == 1 %}
-                                         {% set role = 'Admin' %}
-                                      {% else %}
-                                         {% set role = 'Pegawai' %}
-                                      {% endif %}
+                                  {% if user.roles[0].id == 1 %}
+                                    {% set role = 'Admin' %}
+                                  {% else %}
+                                    {% set role = 'Pegawai' %}
+                                  {% endif %}
+                                  {% if auth_user().id == 1 and user.id != auth_user().id %}
                                       <tr class="gradeA">
                                          <td>{{user.name}}</td>
                                          <td>{{user.email}}</td>
@@ -54,11 +53,29 @@
                                          <td>
                                             <a class="mb-sm btn btn-green btn-xs pull-left" href="user/{{ user.id }}/edit">Edit</a>
                                             <!--  <a class="mb-sm btn btn-danger btn-xs" href="#">Delete</a>  -->
-                                            <form method="POST" action="{{ url('user') }}/{{ user.id }}">
-                                                <input type="hidden" name="_METHOD" value="DELETE"> &nbsp;
-                                                <button class="mb-sm btn btn-danger btn-xs" href="#">Delete</button>
+                                            <form id="delete_{{user.id}}" method="POST" action="{{ url('user') }}/{{ user.id }}">
+                                                <input type="hidden" name="_method" value="DELETE"> &nbsp;
+                                                {{csrf_field()}}
+                                                <button type="button" id="{{user.id}}" onclick="deleteUser(this.id)" class="mb-sm btn btn-danger btn-xs">Delete</button>
                                             </form>
                                          </td>
+                                      </tr>
+                                  {% elseif role == 'Pegawai' %}
+                                      <tr class="gradeA">
+                                          <td>{{user.name}}</td>
+                                          <td>{{user.email}}</td>
+                                          <td>{{user.alamat}}</td>
+                                          <td>{{user.no_telepon}}</td>
+                                          <td>{{role}}</td>
+                                          <td>
+                                              <a class="mb-sm btn btn-green btn-xs pull-left" href="user/{{ user.id }}/edit">Edit</a>
+                                              <!--  <a class="mb-sm btn btn-danger btn-xs" href="#">Delete</a>  -->
+                                              <form id="delete_{{user.id}}" method="POST" action="{{ url('user') }}/{{ user.id }}">
+                                                  <input type="hidden" name="_method" value="DELETE"> &nbsp;
+                                                  {{csrf_field()}}
+                                                  <button type="button" id="{{user.id}}" onclick="deleteUser(this.id)" class="mb-sm btn btn-danger btn-xs">Delete</button>
+                                              </form>
+                                          </td>
                                       </tr>
                                   {% endif %}
                               {%endfor%}
@@ -80,4 +97,21 @@
     <script src="{{ asset('vendor/datatables/media/js/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-colvis/js/dataTables.colVis.js') }}"></script>
     <!-- END Page Custom Script-->
+    <!-- SWEET ALERT-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        function deleteUser(id) {
+            swal({
+                title: "Are you sure?",
+                text: "You will delete this user permanently!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    document.getElementById('delete_'+id).submit();
+                }
+            });
+        }
+    </script>
 {% endblock %}

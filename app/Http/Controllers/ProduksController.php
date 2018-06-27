@@ -61,14 +61,14 @@ class ProduksController extends Controller
         $produk->stok = $request->input('stok');
         $save = $produk->save();
 
-        if ($save) {
+        /*if ($save) {
             $stock = new Stock();
             $stock->stock = $request->input('stok');
             $stock->id_produk = $produk->id_produk;
             $stock->created_at = date('Y-m-d h:i:s');
             $stock->updated_at = date('Y-m-d h:i:s');
             $stock->save();
-        }
+        }*/
 
         $message = array(
             'error' => '1',
@@ -156,8 +156,8 @@ class ProduksController extends Controller
      */
     public function destroy($id)
     {
-        $produk = Produk::find($id);
-        $produk->delete();
+        /*$produk = Produk::find($id);
+        $produk->delete();*/
         return redirect('/produk')->with('success', 'Produk berhasil dihapus');
     }
 

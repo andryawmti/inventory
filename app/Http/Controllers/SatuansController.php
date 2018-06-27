@@ -97,8 +97,8 @@ class SatuansController extends Controller
      */
     public function destroy($id)
     {
-        $satuan = Satuan::find($id);
-        $satuan->delete();
+        /*$satuan = Satuan::find($id);
+        $satuan->delete();*/
         return redirect('/satuan')->with('success', 'Data satuan berhasil dihapus');
     }
 }
