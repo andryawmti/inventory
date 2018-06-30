@@ -69,7 +69,7 @@
                                  <td>{{ pembelian.total_harga | number_format(2, ',', '.') }}</td>
                                  <td>
                                     <a class="mb-sm btn btn-info btn-xs" id="{{pembelian.id_transaksi}}" href="#" onclick="viewDetail(this.id)">Lihat Detail</a>
-                                    {#<a class="mb-sm btn btn-info btn-xs" id="edit_{{pembelian.id_transaksi}}" href="{{url('/pembelian/')}}/{{pembelian.id_transaksi}}/edit">Edit</a>#}&nbsp;
+                                    <a class="mb-sm btn btn-info btn-xs" id="edit_{{pembelian.id_transaksi}}" href="{{url('/pembelian/')}}/{{pembelian.id_transaksi}}/edit">Edit</a>&nbsp;
                                     {#a class="mb-sm btn btn-danger btn-xs" href="#">Delete</a>#}
                                  </td>
                               </tr>
