@@ -44,7 +44,11 @@ class ReportController extends Controller
                 ->whereBetween('t.tgl_transaksi', [$data['date_start'], $data['date_end']])
                 ->get();
             $pembelians = json_decode($pembelians, true);
-            return Excel::create('report_pembelian', function ($excel) use ($pembelians) {
+            return Excel::setOptions([
+                'logOutputFile' => storage_path('logs/log.htm'),
+                'tempDir' => storage_path('logs/')
+            ])
+            ->create('report_pembelian', function ($excel) use ($pembelians) {
                 $excel->sheet('laporan', function ($sheet) use ($pembelians){
                     $sheet->fromArray($pembelians);
                 });
@@ -57,7 +61,7 @@ class ReportController extends Controller
                 ->whereBetween('t.tgl_transaksi', [$data['date_start'], $data['date_end']])
                 ->get();
             $pembelians = json_decode($pembelians, true);
-            $report = PDF::setOption([
+            $report = PDF::setOptions([
                     'logOutputFile' => storage_path('logs/log.htm'),
                     'tempDir' => storage_path('logs/')
                 ])
@@ -89,7 +93,7 @@ class ReportController extends Controller
         $pembelian = $pembelian[0];
         $pembelian->detail = $detail_pembelian;
 //        return json_encode($pembelian);
-        $report = PDF::setOption([
+        $report = PDF::setOptions([
             'logOutputFile' => storage_path('logs/log.htm'),
             'tempDir' => storage_path('logs/')
         ])
@@ -128,7 +132,11 @@ class ReportController extends Controller
                 ->whereBetween('t.tgl_transaksi', [$data['date_start'], $data['date_end']])
                 ->get();
             $penjualans = json_decode($penjualans, true);
-            return Excel::create('report_penjualan', function ($excel) use ($penjualans) {
+            return Excel::setOptions([
+                'logOutputFile' => storage_path('logs/log.htm'),
+                'tempDir' => storage_path('logs/')
+            ])
+            ->create('report_penjualan', function ($excel) use ($penjualans) {
                 $excel->sheet('laporan', function ($sheet) use ($penjualans){
                     $sheet->fromArray($penjualans);
                 });
@@ -141,7 +149,7 @@ class ReportController extends Controller
                 ->whereBetween('t.tgl_transaksi', [$data['date_start'], $data['date_end']])
                 ->get();
             $penjualans = json_decode($penjualans, true);
-            $report = PDF::setOption([
+            $report = PDF::setOptions([
                 'logOutputFile' => storage_path('logs/log.htm'),
                 'tempDir' => storage_path('logs/')
             ])
@@ -173,7 +181,7 @@ class ReportController extends Controller
         $penjualan = $penjualan[0];
         $penjualan->detail = $detail_penjualan;
 //        return json_encode($penjualan);
-        $report = PDF::setOption([
+        $report = PDF::setOptions([
             'logOutputFile' => storage_path('logs/log.htm'),
             'tempDir' => storage_path('logs/')
         ])
