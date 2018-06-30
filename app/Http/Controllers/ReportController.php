@@ -44,7 +44,11 @@ class ReportController extends Controller
                 ->whereBetween('t.tgl_transaksi', [$data['date_start'], $data['date_end']])
                 ->get();
             $pembelians = json_decode($pembelians, true);
-            return Excel::create('report_pembelian', function ($excel) use ($pembelians) {
+            return Excel::setOptions([
+                'logOutputFile' => storage_path('logs/log.htm'),
+                'tempDir' => storage_path('logs/')
+            ])
+            ->create('report_pembelian', function ($excel) use ($pembelians) {
                 $excel->sheet('laporan', function ($sheet) use ($pembelians){
                     $sheet->fromArray($pembelians);
                 });
@@ -57,7 +61,11 @@ class ReportController extends Controller
                 ->whereBetween('t.tgl_transaksi', [$data['date_start'], $data['date_end']])
                 ->get();
             $pembelians = json_decode($pembelians, true);
-            $report = PDF::loadView('pages.report.report_layout_pembelian', compact('pembelians', $pembelians));
+            $report = PDF::setOptions([
+                    'logOutputFile' => storage_path('logs/log.htm'),
+                    'tempDir' => storage_path('logs/')
+                ])
+                ->loadView('pages.report.report_layout_pembelian', compact('pembelians', $pembelians));
             return $report->download('report_pembelian.pdf');
         }
     }
@@ -85,7 +93,11 @@ class ReportController extends Controller
         $pembelian = $pembelian[0];
         $pembelian->detail = $detail_pembelian;
 //        return json_encode($pembelian);
-        $report = PDF::loadView('pages.report.report_layout_detail_pembelian', compact('pembelian', $pembelian));
+        $report = PDF::setOptions([
+            'logOutputFile' => storage_path('logs/log.htm'),
+            'tempDir' => storage_path('logs/')
+        ])
+        ->loadView('pages.report.report_layout_detail_pembelian', compact('pembelian', $pembelian));
         return $report->download('report_detail_pembelian_'.$id.'.pdf');
     }
 
@@ -120,7 +132,11 @@ class ReportController extends Controller
                 ->whereBetween('t.tgl_transaksi', [$data['date_start'], $data['date_end']])
                 ->get();
             $penjualans = json_decode($penjualans, true);
-            return Excel::create('report_penjualan', function ($excel) use ($penjualans) {
+            return Excel::setOptions([
+                'logOutputFile' => storage_path('logs/log.htm'),
+                'tempDir' => storage_path('logs/')
+            ])
+            ->create('report_penjualan', function ($excel) use ($penjualans) {
                 $excel->sheet('laporan', function ($sheet) use ($penjualans){
                     $sheet->fromArray($penjualans);
                 });
@@ -133,7 +149,11 @@ class ReportController extends Controller
                 ->whereBetween('t.tgl_transaksi', [$data['date_start'], $data['date_end']])
                 ->get();
             $penjualans = json_decode($penjualans, true);
-            $report = PDF::loadView('pages.report.report_layout_penjualan', compact('penjualans', $penjualans));
+            $report = PDF::setOptions([
+                'logOutputFile' => storage_path('logs/log.htm'),
+                'tempDir' => storage_path('logs/')
+            ])
+            ->loadView('pages.report.report_layout_penjualan', compact('penjualans', $penjualans));
             return $report->download('report_pembelian.pdf');
         }
     }
@@ -161,7 +181,11 @@ class ReportController extends Controller
         $penjualan = $penjualan[0];
         $penjualan->detail = $detail_penjualan;
 //        return json_encode($penjualan);
-        $report = PDF::loadView('pages.report.report_layout_detail_penjualan', compact('penjualan', $penjualan));
+        $report = PDF::setOptions([
+            'logOutputFile' => storage_path('logs/log.htm'),
+            'tempDir' => storage_path('logs/')
+        ])
+        ->loadView('pages.report.report_layout_detail_penjualan', compact('penjualan', $penjualan));
         return $report->download('report_detail_penjualan_'.$id.'.pdf');
     }
 }
