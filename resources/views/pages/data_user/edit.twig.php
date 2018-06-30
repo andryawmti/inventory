@@ -104,7 +104,7 @@
                                     <label class="col-sm-2 control-label">Photo Profile</label>
                                     <div class="col-sm-6">
                                         <img src="{% if user.photo_profile %}{{url('/')}}{{user.photo_profile}}{% else %}{{ asset('app/img/user/02.jpg') }}{% endif %}"
-                                             alt="Photo Profile" width="120" height="120" style="margin-bottom: 10px; border-radius: 5px">
+                                             alt="Photo Profile" width="120" height="120" style="object-fit: cover; margin-bottom:10px; border-radius: 5px">
                                         <input type="file" class="form-control" name="photo_profile">
                                     </div>
                                 </div>
