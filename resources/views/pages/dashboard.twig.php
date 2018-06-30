@@ -132,7 +132,7 @@
                         <tbody>
                         {% for p in pembelian.list_data %}
                         <tr>
-                            <td><a href="{{url('penjualan')}}/{{p.id_transaksi}}/edit">#{{p.id_transaksi}}</a>
+                            <td><a href="{{url('pembelian')}}/{{p.id_transaksi}}/edit">#{{p.id_transaksi}}</a>
                             </td>
                             <td>{{p.tgl_transaksi|date('Y-m-d')}}</td>
                             <td class="visible-lg visible-sm visible-xs">{{p.nama_distributor}}</td>
