@@ -19,7 +19,7 @@
             <!-- START row-->
             <div class="row">
                <div class="col-md-12">
-                  <form method="POST" action="{{ url('user') }}/{{ user.id }}" data-parsley-validate="" novalidate="" class="form-horizontal">
+                  <form method="POST" enctype="multipart/form-data" action="{{ url('user') }}/{{ user.id }}" data-parsley-validate="" novalidate="" class="form-horizontal">
                      <!-- START panel-->
                      <div class="panel panel-default">
                         <!--  <div class="panel-heading">
@@ -96,6 +96,17 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-2">&nbsp;</div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="col-sm-1">&nbsp;</div>
+                                    <label class="col-sm-2 control-label">Photo Profile</label>
+                                    <div class="col-sm-6">
+                                        <img src="{% if user.photo_profile %}{{url('/')}}{{user.photo_profile}}{% else %}{{ asset('app/img/user/02.jpg') }}{% endif %}"
+                                             alt="Photo Profile" width="120" height="120" style="margin-bottom: 10px; border-radius: 5px">
+                                        <input type="file" class="form-control" name="photo_profile">
+                                    </div>
                                 </div>
                             </fieldset>
                            {{ csrf_field() }}

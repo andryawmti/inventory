@@ -108,12 +108,12 @@
                         <!-- START list group-->
                         <div class="list-group">
                            <!-- list item-->
-                           <a href="/profile/{{auth_user().id}}" class="list-group-item">Profile</a>
+                           <a href="/profile/{{auth_user().id}}" class="list-group-item"><em class="fa fa-user"></em>&nbsp;Profile</a>
                            <!-- last list item-->
                            <a class="list-group-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                          document.getElementById('logout-form').submit();">
-                                Logout
+                                <em class="fa fa-times-circle-o"></em>&nbsp;Logout
                             </a>
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -141,15 +141,16 @@
                <!-- User picture-->
                <div class="user-block-picture">
                   <div class="user-block-status">
-                     <img src="{{ asset('app/img/user/02.jpg') }}" alt="Avatar" width="60" height="60" class="img-thumbnail img-circle">
+                     <img src="{% if auth_user().photo_profile %}{{url('/')}}{{auth_user().photo_profile}}{% else %}{{ asset('app/img/user/02.jpg') }}{% endif %}"
+                          alt="Avatar" width="120" height="120" class="img-thumbnail img-circle">
                      <div class="circle circle-success circle-lg"></div>
                   </div>
                   <!-- Status when collapsed-->
                </div>
                <!-- Name and Role-->
                <div class="user-block-info">
-                  <span class="user-block-name item-text">Welcome User</span>
-                  <span class="user-block-role">UX-Dev</span>
+                  <span class="user-block-name item-text">Welcome {{auth_user().name}}</span>
+                  <span class="user-block-role">Selamat Pagi</span>
                </div>
             </div>
             <!-- END user info-->
