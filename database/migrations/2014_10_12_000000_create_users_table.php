@@ -20,6 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->text('alamat');
             $table->string('no_telepon', 15);
+            $table->string('photo_profile', 300);
+            $table->string('photo_profile_mime', 200);
             $table->boolean('active')->default(1);
             $table->rememberToken();
             $table->timestamps();

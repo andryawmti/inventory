@@ -6,6 +6,7 @@ use FontLib\Table\Table;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -57,6 +58,12 @@ class UserController extends Controller
         $user->no_telepon = $request->input('no_telepon');
         $user->created_at = date('Y-m-d h:i:s');
         $user->updated_at = date('Y-m-d h:i:s');
+        if ($request->hasFile('photo_profile')) {
+            $path = Storage::putFile('public/photo_proifle', $request->file('photo_profile'));
+            $file_url = Storage::url($path);
+            $user->photo_profile = $file_url;
+            $user->photo_profile_mime = $request->file('photo_profile')->getClientMimeType();
+        }
         $save = $user->save();
 
         $user->roles()->attach($request->input('role'));
@@ -125,11 +132,18 @@ class UserController extends Controller
         $user->password = bcrypt($request->input('password'));
         $user->alamat = $request->input('alamat');
         $user->no_telepon = $request->input('no_telepon');
+        if ($request->hasFile('photo_profile')) {
+            $path = Storage::putFile('public/photo_profile', $request->file('photo_profile'));
+            $file_url = Storage::url($path);
+            $user->photo_profile = $file_url;
+            $user->photo_profile_mime = $request->file('photo_profile')->getClientMimeType();
+        }
         $update = $user->save();
-
-        DB::table('role_users')
-            ->where('user_id', $id)
-            ->update(['role_id'=>$request->input('role')]);
+        if ($request->input('role') != NULL) {
+            DB::table('role_users')
+                ->where('user_id', $id)
+                ->update(['role_id'=>$request->input('role')]);
+        }
 
         return redirect('/user')->with('success', 'Data user berhasil diperbaharui');
     }

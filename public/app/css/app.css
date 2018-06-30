@@ -1917,7 +1917,7 @@ x:-o-prefocus,
    Component: user-block.less
  ========================================================================== */
 .user-block {
-  display: none;
+  display: block;
   position: relative;
   padding: 25px 30px 0;
   cursor: pointer;

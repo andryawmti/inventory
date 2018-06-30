@@ -15,7 +15,7 @@
             <!-- START row-->
             <div class="row">
                <div class="col-md-12">
-                  <form method="POST" action="{{ url('user') }}" class="form-horizontal" novalidate="" data-parsley-validate="">
+                  <form method="POST" action="{{ url('user') }}" enctype="multipart/form-data" class="form-horizontal" novalidate="" data-parsley-validate="">
                      <!-- START panel-->
                      <div class="panel panel-default">
                         <!--  <div class="panel-heading">
@@ -88,6 +88,15 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-2">&nbsp;</div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="col-sm-1">&nbsp;</div>
+                                    <label class="col-sm-2 control-label">Photo Profile</label>
+                                    <div class="col-sm-6">
+                                        <input type="file" class="form-control" name="photo_profile">
+                                    </div>
                                 </div>
                             </fieldset>
                            {{ csrf_field() }}
