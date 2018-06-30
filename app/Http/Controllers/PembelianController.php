@@ -276,7 +276,23 @@ class PembelianController extends Controller
             "total_transaction" => 0,
             "email_sent" => false,
         );
-        $produks = $this->getOutOfStockProduk();
+
+        $produks = $this->getOutOfStockProduk(); /*this out of stock product, is based on eqo rule data*/
+        //return json_encode($produks);
+        /*check if there is already an auto purchase for the product that still not delivered,
+        we will exlude that procut from list*/
+        foreach ($produks as $x => $p) {
+            $existing = DB::table('transaksis as t')
+                ->selectRaw('dt.id_produk')
+                ->rightJoin('detail_transaksi as dt', 'dt.id_transaksi', '=', 't.id_transaksi')
+                ->whereRaw('t.is_delivered = 0 AND t.type = 0 AND t.mode = "auto_purchase"')
+                ->where('dt.id_produk', '=', $p->id_produk)
+                ->count();
+            if ($existing) {
+                unset($produks[$x]);
+            }
+        }
+
         if (count($produks) > 0) {
             /**we will separate each produk transaction based on distributor id, so it is just like segmenting produk by distributor id
             first, get distributor list from list of produks*/
@@ -298,7 +314,7 @@ class PembelianController extends Controller
                 $transaksi->tgl_transaksi = date('Y-m-d h:i:s');
                 $transaksi->total_harga = $this->getTotalHarga($tl['produk_list']);
                 $transaksi->type = '0';
-                $transaksi->mode = '1';
+                $transaksi->mode = 'auto_purchase';
                 if($transaksi->save()){
                     $my_produks = array();
                     $id_transaksi = $transaksi->id_transaksi;
@@ -316,10 +332,10 @@ class PembelianController extends Controller
                             'updated_at'=> date("Y-m-d h:i:s")
                         );
                     }
-                    $isProduksInserted = DB::table('detail_transaksi')->insert($my_produks);
-                    if($isProduksInserted){
+                    $detailTransSaved = DB::table('detail_transaksi')->insert($my_produks);
+                    if($detailTransSaved){
                         foreach ($tl['produk_list'] as $p) {
-                            /**we disable this, because we will update the stock when the iten is received
+                            /**we disable this, because we will update the stock when the item is received
                             $this->updateStok(array('id'=>$p['id_produk'],'new_stok'=>$p['qty']));*/
                             $eqo_rule = PengaturanEqo::where('id_produk','=',$p->id_produk)->first();
                             $num_of_order = $p->number_of_order;
