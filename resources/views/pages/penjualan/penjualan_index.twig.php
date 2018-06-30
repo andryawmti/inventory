@@ -76,7 +76,7 @@
                                  <td>{{ penjualan.grand_total | number_format(2, ',', '.') }}</td>
                                  <td>
                                     <a class="mb-sm btn btn-info btn-xs" href="#" id="{{penjualan.id_transaksi}}" onclick="viewDetail(this.id);">Lihat Detail</a>
-                                    {#<a class="mb-sm btn btn-info btn-xs" href="{{url('penjualan')}}/{{penjualan.id_transaksi}}/edit" id="edit_{{penjualan.id_transaksi}}">Edit</a>#} &nbsp;
+                                    <a class="mb-sm btn btn-info btn-xs" href="{{url('penjualan')}}/{{penjualan.id_transaksi}}/edit" id="edit_{{penjualan.id_transaksi}}">Edit</a> &nbsp;
                                     {#<a class="mb-sm btn btn-danger btn-xs" href="#">Delete</a>#}
                                  </td>
                               </tr>
